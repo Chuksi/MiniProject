@@ -32,8 +32,10 @@ public class MainActivity extends AppCompatActivity {
 
         Button press = findViewById(R.id.button);
 
+        Toast text = Toast.makeText(getApplicationContext(),"Text",Toast.LENGTH_LONG);
         press.setOnClickListener(v->{
             pointA.x +=10;
+            text.show();
         });
 
 
