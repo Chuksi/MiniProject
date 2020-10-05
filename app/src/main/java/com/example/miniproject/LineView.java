@@ -80,12 +80,13 @@ public class LineView extends View {
         canvas.drawColor(Color.BLUE);
         //canvas.scale(2,2);
         canvas.drawBitmap(bitmap,rectA,rectB,paint);
+        /*
         for (int i = 0;i<getWidth()-1; i++) {
             for (int j = 900; j < 1100; j++) {
                 paint.setColor(0xFF008800);
                 canvas.drawPoint(i,j,paint);
             }
-        }
+        }*/
 
 
         //}
@@ -112,19 +113,19 @@ public class LineView extends View {
         double zx,zy,xtemp;
 
         bitmap = Bitmap.createBitmap(1000, 1000, Bitmap.Config.ARGB_8888);
-        /*for (int i = 0;i<bitmap.getWidth()-1; i++) {
+        for (int i = 0;i<bitmap.getWidth(); i++) {
             for (int j = 0; j < 1000; j++) {
-                zx =i*getScaleX();
-                zy =j*getScaleY();
-                while(iteration < maxIteration) {
+                bitmap.setPixel(i, j, Color.RED);
+                //zx =i*getScaleX();
+                //zy =j*getScaleY();
+                /*while(iteration < maxIteration) {
                     xtemp = zx*zx-zy*zy;
                     zy = 2*zy*zx+0.19;
                     zx = xtemp + -0.726;
                     iteration++;
-                }
-                bitmap.setPixel((int)zx, (int) zy, Color.RED);
+                }*/
             }
-        }*/
+        }
         rectA = new Rect(0,0,bitmap.getWidth(),bitmap.getHeight());
         rectB = new Rect(0,0,bitmap.getWidth(),bitmap.getHeight());
     }
