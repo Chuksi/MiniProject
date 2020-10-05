@@ -3,15 +3,25 @@ package com.example.miniproject;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.PixelFormat;
+import android.graphics.Point;
 import android.graphics.PointF;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffXfermode;
+import android.graphics.Rect;
 import android.os.Bundle;
+import android.view.PixelCopy;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
 
-    PointF pointA = new PointF(400,300);
+    PointF pointA = new PointF(23,400);
 
     PointF pointB = new PointF(410,1000);
 
@@ -24,20 +34,19 @@ public class MainActivity extends AppCompatActivity {
 
         mLineView = findViewById(R.id.lineView);
 
+
         mLineView.setPointA(pointA);
 
         mLineView.setPointB(pointB);
 
-        mLineView.draw();
+        //mLineView.draw();
 
-        Button press = findViewById(R.id.button);
+        mLineView.map();
 
-        Toast text = Toast.makeText(getApplicationContext(),"Text",Toast.LENGTH_LONG);
-        press.setOnClickListener(v->{
-            pointA.x +=10;
-            text.show();
-        });
+    }
 
-
+    @Override
+    protected void onStart() {
+        super.onStart();
     }
 }
