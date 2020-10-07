@@ -10,7 +10,10 @@ import android.graphics.Paint;
 import android.graphics.Point;
 import android.graphics.PointF;
 import android.graphics.Rect;
+import android.icu.number.Scale;
 import android.util.AttributeSet;
+import android.util.Range;
+import android.view.ScaleGestureDetector;
 import android.view.View;
 
 import androidx.annotation.ColorInt;
@@ -20,13 +23,16 @@ public class LineView extends View {
     private Paint paint = new Paint();
 
     private PointF pointA,pointB;
-    int iteration=0;
-    int maxIteration=3;
+
     Bitmap bitmap;
     //BitmapFactory bitmapFactory;
 
     public Rect rectA;
     public Rect rectB;
+
+    public int x = this.getWidth();
+    public int y = this.getWidth();
+    private float i;
 
 
     public LineView(Context context) {
@@ -36,6 +42,7 @@ public class LineView extends View {
     public LineView(Context context, @Nullable AttributeSet attrs) {
 
         super(context, attrs);
+
     }
 
     public LineView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
@@ -109,24 +116,49 @@ public class LineView extends View {
     }
 
     public void map() {
+        int w = 800;
+        int h = 600;
+        double aa,bb;
+        double CX = -0.7;
+        double CY = 0.27015;
+        double ZOOM = 1;
+        double MOVE_X = 0;
+        double MOVE_y = 0;
+        int MAX_ITERATIONS=100;
+        int R = 2 ; // choose R > 0 such that R**2 - R >= sqrt(cx**2 + cy**2)
+        bitmap = Bitmap.createBitmap(w,h, Bitmap.Config.ARGB_8888);
+        rectA = new Rect(0,0,bitmap.getWidth(),bitmap.getHeight());
+        rectB = new Rect(0,0,bitmap.getWidth(),bitmap.getHeight());
+        for (int x = 0; x <bitmap.getWidth(); x++) {
+            for (int y = 0; y < bitmap.getHeight(); y++) {
 
-        double zx,zy,xtemp;
+                double zx = 1.5*(x-bitmap.getWidth()/2)/(0.5*ZOOM*bitmap.getWidth())+MOVE_X;
+                double zy = (y-bitmap.getHeight()/2)/(0.5*ZOOM*bitmap.getHeight())+MOVE_y;
+                //double x0 = Px*(2/bitmap.getWidth());
+                //double y0 = Py*(2/bitmap.getHeight());
+                //double x = 0.0;
+                //double y = 0.0;
+                //double temp;
+                //int iteration=0;
+                float i = MAX_ITERATIONS;
+                while(zx*zx + zy*zy < 4 && i >0) {
+                    double tmp = zx * zx -zy*zy + CX;
+                    zy = 2.0*zx* zy + CY;
+                    zx = tmp;
+                    i--;
 
-        bitmap = Bitmap.createBitmap(1000, 1000, Bitmap.Config.ARGB_8888);
-        for (int i = 0;i<bitmap.getWidth(); i++) {
-            for (int j = 0; j < 1000; j++) {
-                bitmap.setPixel(i, j, Color.RED);
-                //zx =i*getScaleX();
-                //zy =j*getScaleY();
-                /*while(iteration < maxIteration) {
-                    xtemp = zx*zx-zy*zy;
-                    zy = 2*zy*zx+0.19;
-                    zx = xtemp + -0.726;
-                    iteration++;
+                }
+                int c = i>0?0:255;
+                bitmap.setPixel(x,y,Color.rgb(c*c,c,0));
+                /*if(iteration==maxIteration) {
+
+                    bitmap.setPixel(Px,Py,Color.RED);
+                }
+                else {
+                    bitmap.setPixel(Px,Py,Color.YELLOW);
                 }*/
             }
         }
-        rectA = new Rect(0,0,bitmap.getWidth(),bitmap.getHeight());
-        rectB = new Rect(0,0,bitmap.getWidth(),bitmap.getHeight());
+
     }
 }
