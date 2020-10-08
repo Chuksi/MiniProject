@@ -44,9 +44,7 @@ public class MainActivity extends AppCompatActivity {
 
         boolean animation = true;
 
-
         Timer myTimer = new Timer();
-
 
         mLineView.setOnClickListener(v -> {
             myTimer.cancel();
@@ -60,9 +58,8 @@ public class MainActivity extends AppCompatActivity {
                     mLineView.draw();
                 });
             }
-        }, 500, 500);
+        }, 1500, 1500);
         //mLineView.map();
-
     }
 
     @Override
