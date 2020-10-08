@@ -19,6 +19,9 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+import java.util.Timer;
+import java.util.TimerTask;
+
 public class MainActivity extends AppCompatActivity {
 
     PointF pointA = new PointF(23,400);
@@ -39,9 +42,26 @@ public class MainActivity extends AppCompatActivity {
 
         mLineView.setPointB(pointB);
 
-        //mLineView.draw();
+        boolean animation = true;
 
-        mLineView.map();
+
+        Timer myTimer = new Timer();
+
+
+        mLineView.setOnClickListener(v -> {
+            myTimer.cancel();
+        });
+
+       // mLineView.draw();
+        myTimer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                mLineView.post(() -> {
+                    mLineView.draw();
+                });
+            }
+        }, 500, 500);
+        //mLineView.map();
 
     }
 

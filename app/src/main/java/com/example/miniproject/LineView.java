@@ -12,6 +12,7 @@ import android.graphics.PointF;
 import android.graphics.Rect;
 import android.icu.number.Scale;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.util.Range;
 import android.view.ScaleGestureDetector;
 import android.view.View;
@@ -37,24 +38,29 @@ public class LineView extends View {
 
     public LineView(Context context) {
         super(context);
+        this.setWillNotDraw(false);
     }
 
     public LineView(Context context, @Nullable AttributeSet attrs) {
 
         super(context, attrs);
+        this.setWillNotDraw(false);
 
     }
 
     public LineView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
+        this.setWillNotDraw(false);
 
 
     }
 
     @Override
     protected void onDraw(Canvas canvas) {
-        if(bitmap==null)
+        if(bitmap!=null)
             return;
+
+        map(canvas.getWidth(), canvas.getHeight());
         //paint.setColor(Color.RED);
         //paint.setStrokeWidth(1);
         //canvas.drawLine(pointA.x,pointA.y,pointB.x,pointB.y,paint);
@@ -110,17 +116,25 @@ public class LineView extends View {
     }
 
     public void draw() {
+        this.bitmap = null;
+
+        CX = CX - 0.0001;
+        CY = CY + 0.0001;
+
         invalidate();
         requestLayout();
 
     }
 
-    public void map() {
-        int w = 800;
-        int h = 600;
+    private double CX = -0.7;
+    private double CY = 0.27015;
+
+    public void map(int w, int h) {
+        //int w = 800;
+        //int h = 600;
         double aa,bb;
-        double CX = -0.7;
-        double CY = 0.27015;
+        //double CX = -0.7;
+        //double CY = 0.27015;
         double ZOOM = 1;
         double MOVE_X = 0;
         double MOVE_y = 0;
@@ -149,7 +163,8 @@ public class LineView extends View {
 
                 }
                 int c = i>0?0:255;
-                bitmap.setPixel(x,y,Color.rgb(c*c,c,0));
+                int a = i>MAX_ITERATIONS?255:0;
+                bitmap.setPixel(x,y,Color.rgb(0,c,a));
                 /*if(iteration==maxIteration) {
 
                     bitmap.setPixel(Px,Py,Color.RED);
