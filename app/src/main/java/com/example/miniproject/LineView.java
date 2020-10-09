@@ -21,6 +21,8 @@ import androidx.annotation.ColorInt;
 import androidx.annotation.Nullable;
 
 import java.awt.font.NumericShaper;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class LineView extends View {
     private Paint paint = new Paint();
@@ -37,6 +39,7 @@ public class LineView extends View {
     public int y = this.getWidth();
     private float i;
 
+    Timer innerTimer = new Timer();
 
     public LineView(Context context) {
         super(context);
@@ -62,7 +65,8 @@ public class LineView extends View {
         if(bitmap!=null)
             return;
 
-        map(canvas.getWidth(), canvas.getHeight());
+        //map(canvas.getWidth(), canvas.getHeight());
+        map(400,300);
         //paint.setColor(Color.RED);
         //paint.setStrokeWidth(1);
         //canvas.drawLine(pointA.x,pointA.y,pointB.x,pointB.y,paint);
@@ -94,6 +98,11 @@ public class LineView extends View {
 
         canvas.drawColor(Color.BLUE);
         //canvas.scale(2,2);
+        /*innerTimer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+            }
+        }, 10);*/
         canvas.drawBitmap(bitmap,rectA,rectB,paint);
         /*
         for (int i = 0;i<getWidth()-1; i++) {
@@ -121,7 +130,7 @@ public class LineView extends View {
         this.bitmap = null;
         //z = Math.random()*Math.PI*2;
 
-        z+=Math.PI/100;
+        z+=Math.PI/1500;
 
         CX = 0.7885*Math.cos(z);
         CY = 0.7885*Math.sin(z);
@@ -131,10 +140,11 @@ public class LineView extends View {
         invalidate();
         requestLayout();
     }
-    double z = 0;
+    double z = 1.4;
     double v,w;
     private double CX = -0.8;
     private double CY = 0.156;
+    double j=0;
 
     public void map(int w, int h) {
         //int w = 800;
@@ -145,11 +155,13 @@ public class LineView extends View {
         double ZOOM = 1;
         double MOVE_X = 0;
         double MOVE_y = 0;
-        int MAX_ITERATIONS=20;
+        int MAX_ITERATIONS=30;
         int R = 2 ; // choose R > 0 such that R**2 - R >= sqrt(cx**2 + cy**2)
         bitmap = Bitmap.createBitmap(w,h, Bitmap.Config.ARGB_8888);
         rectA = new Rect(0,0,bitmap.getWidth(),bitmap.getHeight());
-        rectB = new Rect(0,0,bitmap.getWidth(),bitmap.getHeight());
+        rectB = new Rect(0,0,bitmap.getWidth()*3*2,bitmap.getHeight()*3);
+
+
         for (int x = 0; x <bitmap.getWidth(); x++) {
             for (int y = 0; y < bitmap.getHeight(); y++) {
 
@@ -162,17 +174,32 @@ public class LineView extends View {
                 //double temp;
                 //int iteration=0;
                 float i = MAX_ITERATIONS;
-                while(zx*zx + zy*zy < 4 && i >0) {
+                while(zx*zx + zy*zy< 4 && i >0) {
                     double tmp = zx * zx -zy*zy + CX;
                     zy = 2.0*zx* zy + CY;
                     zx = tmp;
                     i--;
                 }
-                int c = i>0?0:250;
-                int a = i>MAX_ITERATIONS? 0:250;
+                j = zx*zx + zy*zy;
+                int r;
+                int g;
+                int b;
+                //int c = i>0?0:250;
+                if(i>0) {
+                    r=0;
+                    g=0;
+                    b=0;
+                    //c=(int) (250/i);
+                } else {
+                    r=(int)(Math.cos(j)*250);
+                    g=(int)(Math.sin(j+Math.PI/3)*250);
+                    b=(int)(Math.cos(j+Math.PI/6)*250);
+                }
+                //int a = i>MAX_ITERATIONS? 0:250;
                 Range range = new Range(0,255);
+                //if()
                 range.getLower();
-                bitmap.setPixel(x,y,Color.rgb(0,c,c));
+                bitmap.setPixel(x,y,Color.rgb(g, r, b));
                 /*if(iteration==maxIteration) {
 
                     bitmap.setPixel(Px,Py,Color.RED);

@@ -58,7 +58,7 @@ public class MainActivity extends AppCompatActivity {
                     mLineView.draw();
                 });
             }
-        }, 1500, 1500);
+        }, 0, 50);
         //mLineView.map();
     }
 
