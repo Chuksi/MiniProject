@@ -3,6 +3,8 @@ package com.example.miniproject;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
+import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -13,6 +15,7 @@ import android.graphics.PointF;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.PixelCopy;
 import android.view.View;
@@ -34,9 +37,9 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
         mLineView = findViewById(R.id.lineView);
-
+        Button wikiButton = findViewById(R.id.button);
 
         mLineView.setPointA(pointA);
 
@@ -47,7 +50,7 @@ public class MainActivity extends AppCompatActivity {
         Timer myTimer = new Timer();
 
         mLineView.setOnClickListener(v -> {
-            myTimer.cancel();
+            //myTimer.cancel();
         });
 
        // mLineView.draw();
@@ -58,8 +61,17 @@ public class MainActivity extends AppCompatActivity {
                     mLineView.draw();
                 });
             }
-        }, 0, 50);
+        }, 100, 150);
         //mLineView.map();
+
+
+
+        wikiButton.setOnClickListener(v->{
+            Intent sendIntent = new Intent();
+            sendIntent.setAction(Intent.ACTION_VIEW);
+            sendIntent.setData(Uri.parse("https://en.wikipedia.org/wiki/Julia_set"));
+            startActivity(sendIntent);
+        });
     }
 
     @Override
