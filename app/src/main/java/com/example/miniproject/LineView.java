@@ -1,6 +1,7 @@
 package com.example.miniproject;
 
 import android.content.Context;
+import android.content.ContextWrapper;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -13,23 +14,33 @@ import android.graphics.PointF;
 import android.graphics.Rect;
 import android.icu.number.Scale;
 import android.os.Build;
+import android.os.Environment;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.util.Range;
 import android.view.ScaleGestureDetector;
 import android.view.View;
+import android.widget.Toast;
 
 import androidx.annotation.ColorInt;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 
 import java.awt.font.NumericShaper;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
 
 public class LineView extends View {
+    private static final String TAG = "wdafw";
     private Paint paint = new Paint();
 
+    public static final int REQUEST_CAMERA = 1;
     private PointF pointA,pointB;
 
     Bitmap bitmap;
@@ -47,6 +58,7 @@ public class LineView extends View {
     public LineView(Context context) {
         super(context);
         this.setWillNotDraw(false);
+
     }
 
     public LineView(Context context, @Nullable AttributeSet attrs) {
@@ -268,4 +280,51 @@ public class LineView extends View {
         }
 
     }
+    /*
+    String a="/root/sdcard/Pictures/img0001.jpg";
+    public void storeImage(Bitmap image) {
+        File pictureFile = getOutputMediaFile();
+        if (pictureFile == null) {
+            Log.d(TAG,
+                    "Error creating media file, check storage permissions: ");// e.getMessage());
+            return;
+        }
+        try {
+            FileOutputStream fos = new FileOutputStream(pictureFile);
+            image.compress(Bitmap.CompressFormat.PNG, 90, fos);
+            fos.close();
+        } catch (FileNotFoundException e) {
+            Log.d(TAG, "File not found: " + e.getMessage());
+        } catch (IOException e) {
+            Log.d(TAG, "Error accessing file: " + e.getMessage());
+        }
+    }
+    private File getOutputMediaFile() {
+        // To be safe, you should check that the SDCard is mounted
+        // using Environment.getExternalStorageState() before doing this.
+        File mediaStorageDir = new File(Environment.getExternalStorageDirectory()
+                + "/Android/data/"
+                + getContext().getPackageName()
+                + "/Files");
+        Toast msg = Toast.makeText(getContext(),mediaStorageDir+"",Toast.LENGTH_LONG);
+        msg.show();
+        // This location works best if you want the created images to be shared
+        // between applications and persist after your app has been uninstalled.
+
+        // Create the storage directory if it does not exist
+        if (! mediaStorageDir.exists()){
+            if (! mediaStorageDir.mkdirs()){
+                return null;
+            }
+        }
+        // Create a media file name
+        String timeStamp = new SimpleDateFormat("ddMMyyyy_HHmm").format(new Date());
+        File mediaFile;
+        String mImageName="MI_"+ timeStamp +".jpg";
+        mediaFile = new File(mediaStorageDir.getPath() + File.separator + mImageName);
+        return mediaFile;
+    }
+
+     */
+
 }
