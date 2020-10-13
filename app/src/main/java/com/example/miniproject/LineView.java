@@ -20,6 +20,8 @@ import android.util.Log;
 import android.util.Range;
 import android.view.ScaleGestureDetector;
 import android.view.View;
+import android.widget.SeekBar;
+import android.widget.Switch;
 import android.widget.Toast;
 
 import androidx.annotation.ColorInt;
@@ -39,19 +41,18 @@ import java.util.TimerTask;
 public class LineView extends View {
     private static final String TAG = "wdafw";
     private Paint paint = new Paint();
-
     public static final int REQUEST_CAMERA = 1;
     private PointF pointA,pointB;
 
     Bitmap bitmap;
     //BitmapFactory bitmapFactory;
-
+    public int niter;
     public Rect rectA;
     public Rect rectB;
 
-    public int x = this.getWidth();
-    public int y = this.getWidth();
-    private float i;
+    //public int x = this.getWidth();
+    //public int y = this.getWidth();
+    //private float i;
 
     Timer innerTimer = new Timer();
 
@@ -76,14 +77,16 @@ public class LineView extends View {
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
-    @Override
+    //@Override
     protected void onDraw(Canvas canvas) {
         if(bitmap!=null)
             return;
 
         //map(canvas.getWidth(), canvas.getHeight());
-        map(getWidth()/3,getHeight()/3);
-        //paint.setColor(Color.RED);
+         map(getWidth() / 3, getHeight() / 3);
+         //map(getWidth(), getHeight());
+
+            //paint.setColor(Color.RED);
         //paint.setStrokeWidth(1);
         //canvas.drawLine(pointA.x,pointA.y,pointB.x,pointB.y,paint);
         //paint.setColor(Color.BLUE);
@@ -142,15 +145,21 @@ public class LineView extends View {
         pointB = point;
     }
 
-    public void draw() {
+    public void draw(int test, float koeff,int iterater) {
         this.bitmap = null;
         //z = Math.random()*Math.PI*2;
+        if(test==1) {
+            z += Math.PI / 100;
 
-        z+=Math.PI/100;
+            CX = 0.7885 * Math.cos(z);
+            CY = 0.7885 * Math.sin(z);
 
-        CX = 0.7885*Math.cos(z);
-        CY = 0.7885*Math.sin(z);
-
+        }
+        else if(test == 2) {
+            CX = koeff;
+            CY = koeff;
+            niter = iterater;
+        }
         //CX = CX;
         //CY = CY;
         invalidate();
@@ -174,7 +183,7 @@ public class LineView extends View {
         double MOVE_X = 0;
         double MOVE_y = 0;
         float Saturation = 1f;
-        int MAX_ITERATIONS=12;
+        int MAX_ITERATIONS=niter;
         int R = 2 ; // choose R > 0 such that R**2 - R >= sqrt(cx**2 + cy**2)
         bitmap = Bitmap.createBitmap(w,h, Bitmap.Config.ARGB_8888);
         rectA = new Rect(0,0,bitmap.getWidth(),bitmap.getHeight());

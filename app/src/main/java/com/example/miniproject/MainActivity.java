@@ -28,7 +28,11 @@ import android.util.Log;
 import android.view.DragEvent;
 import android.view.PixelCopy;
 import android.view.View;
+import android.view.animation.Animation;
 import android.widget.Button;
+import android.widget.CompoundButton;
+import android.widget.SeekBar;
+import android.widget.Switch;
 import android.widget.Toast;
 
 import java.io.File;
@@ -48,6 +52,14 @@ public class MainActivity extends AppCompatActivity {
 
     PointF pointB = new PointF(410, 1000);
 
+    public boolean animation = false;
+    int mpause=1;
+    int pause=1;
+
+    float mkoef;
+    int miter;
+
+
     private LineView mLineView;
 
     @Override
@@ -58,25 +70,77 @@ public class MainActivity extends AppCompatActivity {
         mLineView = findViewById(R.id.lineView);
         Button wikiButton = findViewById(R.id.button);
         Button saveButton = findViewById(R.id.button2);
+        Switch demo = findViewById(R.id.switch1);
+        SeekBar reim = findViewById(R.id.seekBar);
+        SeekBar resolution = findViewById(R.id.seekBar2);
         //isStoragePermissionGranted();
         mLineView.setPointA(pointA);
 
         mLineView.setPointB(pointB);
+/*
+        mLineView.setOnClickListener(v ->{
+            if(pause==1){
+                mpause=1;
+                pause = 0;
+            } else {
+                mpause=0;
+                pause=1;
+            }
+        });
 
-        boolean animation = true;
+ */
+
+        reim.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                mkoef = (float)(progress-500)/1500;
+                mLineView.draw(2,mkoef,miter);
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+        });
+
+        resolution.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                miter = (int)progress;
+                mLineView.draw(2,mkoef,miter);
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+        });
 
         Timer myTimer = new Timer();
 
-
-        // mLineView.draw();
         myTimer.schedule(new TimerTask() {
             @Override
             public void run() {
-                mLineView.post(() -> {
-                    mLineView.draw();
-                });
-            }
+                if(animation) {
+
+                    mLineView.post(() -> {
+                        mLineView.draw(mpause,mkoef,12);
+                    });
+                }
+            };
         }, 1000, 150);
+        // mLineView.draw();
+
         //mLineView.map();
 
 
@@ -119,7 +183,29 @@ public class MainActivity extends AppCompatActivity {
             }
             refreshGallery(new_file);
         });
+
+        demo.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(isChecked) {
+                    animation = true;
+                    reim.setEnabled(false);
+                    resolution.setEnabled(false);
+
+                } else {
+                    //do nothing
+                    animation = false;
+                    mLineView.draw(2,mkoef,miter);
+                    reim.setEnabled(true);
+                    resolution.setEnabled(true);
+
+                }
+            }
+        });
+
+
     }
+
 /*
     public  boolean isStoragePermissionGranted() {
         if (Build.VERSION.SDK_INT >= 23) {
