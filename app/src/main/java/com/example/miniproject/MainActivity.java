@@ -1,40 +1,20 @@
 package com.example.miniproject;
 
-
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-
-import android.Manifest;
-import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
-import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Paint;
-import android.graphics.PixelFormat;
-import android.graphics.Point;
-import android.graphics.PointF;
-import android.graphics.PorterDuff;
-import android.graphics.PorterDuffXfermode;
-import android.graphics.Rect;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
-import android.view.DragEvent;
-import android.view.PixelCopy;
 import android.view.View;
-import android.view.animation.Animation;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.SeekBar;
 import android.widget.Switch;
 import android.widget.Toast;
-
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -48,16 +28,12 @@ import java.util.TimerTask;
 public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = "permission";
-    PointF pointA = new PointF(23, 400);
-
-    PointF pointB = new PointF(410, 1000);
 
     public boolean animation = false;
-    int mpause=1;
-    int pause=1;
 
-    float mkoef;
+    int mpause=1;
     int miter;
+    float mkoef;
 
 
     private LineView mLineView;
@@ -73,10 +49,6 @@ public class MainActivity extends AppCompatActivity {
         Switch demo = findViewById(R.id.switch1);
         SeekBar reim = findViewById(R.id.seekBar);
         SeekBar resolution = findViewById(R.id.seekBar2);
-        //isStoragePermissionGranted();
-        mLineView.setPointA(pointA);
-
-        mLineView.setPointB(pointB);
 /*
         mLineView.setOnClickListener(v ->{
             if(pause==1){
@@ -139,10 +111,6 @@ public class MainActivity extends AppCompatActivity {
                 }
             };
         }, 1000, 150);
-        // mLineView.draw();
-
-        //mLineView.map();
-
 
         wikiButton.setOnClickListener(v -> {
             Intent sendIntent = new Intent();
@@ -189,8 +157,8 @@ public class MainActivity extends AppCompatActivity {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if(isChecked) {
                     animation = true;
-                    reim.setEnabled(false);
-                    resolution.setEnabled(false);
+                    //reim.setEnabled(false);
+                    //resolution.setEnabled(false);
 
                 } else {
                     //do nothing
@@ -205,64 +173,6 @@ public class MainActivity extends AppCompatActivity {
 
 
     }
-
-/*
-    public  boolean isStoragePermissionGranted() {
-        if (Build.VERSION.SDK_INT >= 23) {
-            if (checkSelfPermission(android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                    == PackageManager.PERMISSION_GRANTED) {
-                Log.v(TAG,"Permission is granted");
-                return true;
-            } else {
-
-                Log.v(TAG,"Permission is revoked");
-                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 2);
-                return false;
-            }
-        }
-        else { //permission is automatically granted on sdk<23 upon installation
-            Log.v(TAG,"Permission is granted");
-            return true;
-        }
-    }
-    @Override
-    public void onRequestPermissionsResult(int requestCode,
-                                           String permissions[], int[] grantResults) {
-        switch (requestCode) {
-            case 1: {
-                // If request is cancelled, the result arrays are empty.
-                if (grantResults.length > 0
-                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-
-                    // permission was granted, yay! Do the
-                    // contacts-related task you need to do.
-                    Toast.makeText(getApplicationContext(), "Permission granted", Toast.LENGTH_SHORT).show();
-                } else {
-
-                    // permission denied, boo! Disable the
-                    // functionality that depends on this permission.
-                    Toast.makeText(getApplicationContext(), "Permission denied", Toast.LENGTH_SHORT).show();
-                }
-                return;
-            }
-
-            case 2: {
-
-                if (grantResults.length > 0
-                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    Toast.makeText(getApplicationContext(), "Permission granted", Toast.LENGTH_SHORT).show();
-                    mLineView.storeImage(mLineView.bitmap);
-                } else {
-                    Toast.makeText(getApplicationContext(), "Permission denied", Toast.LENGTH_SHORT).show();
-                }
-                return;
-            }
-
-            // other 'case' lines to check for other
-            // permissions this app might request
-        }
-    }
- */
 
     public void refreshGallery(File file) {
         Intent intent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
